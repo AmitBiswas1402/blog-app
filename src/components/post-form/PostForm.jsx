@@ -18,7 +18,7 @@ function PostForm() {
   })
 
   const navigate = useNavigate()
-  const userDatae = useSelector(state => state.user.userData)
+  const userData = useSelector(state => state.user.userData)
 
   const submit = async (data) => {
     if (post) {
@@ -37,8 +37,29 @@ function PostForm() {
       })
     } else {
       const file = await appwriteService.uploadFile(data.image[0])
+
+      if (file) {
+        const filedId = file.$id
+        data.featuredImage = filedId
+        await appwriteService.createPost({
+          ...data,
+          userId: userData.$id,
+        })
+        if (dbPost) {
+          navigate(`/post/${dbPost.$id}`)
+        }
+
+      }
     }
   }
+
+  const slugTransform = useCallback((value) => {
+    if (value && typeof value === 'string'){
+      return value
+      .trim()
+      .toLowerCase()
+    }
+  }, [])
 
   return (
     <div>
