@@ -1,10 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {Container, PostCard} from '../components'
 import appwriteService from '../appwrite/config'
 
 function AllPost() {
+  const [posts, setPosts] = useState([])
+  
+  appwriteService.getPosts().then(() => {
+    if (posts) {
+      setPosts(posts.documents)
+    }
+  })
+  
   return (
-    <div>AllPost</div>
+    <div className='w-full py-8'>
+      <Container>
+        {posts.map((post) => (
+          <div key={posts.$id} className='p-2 w-1/4'>
+            <PostCard post={post} />
+          </div>
+        ))}
+      </Container>
+    </div>
   )
 }
 
