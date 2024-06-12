@@ -4,7 +4,7 @@ import appwriteService from '../appwrite/config'
 
 function AllPost() {
   const [posts, setPosts] = useState([])
-  
+  useEffect(() => {}, [])
   appwriteService.getPosts().then(() => {
     if (posts) {
       setPosts(posts.documents)
